@@ -1,2 +1,0 @@
-ROOT=$(git rev-parse --show-toplevel)
-GIT_WORK_TREE=$ROOT/green-www/ git checkout -f
