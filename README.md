@@ -1,6 +1,6 @@
 # Workshop: Deployments and Deflighting
 
-[Original Workshop](https://github.com/CSC-DevOps/Deployment)
+[Original Workshop](https://github.com/CSC-DevOps/Deployment) and
 [Problem Description](https://github.com/CSC-DevOps/Course/blob/master/HW/HW4.md)
 
 
