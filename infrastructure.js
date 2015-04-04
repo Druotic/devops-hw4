@@ -6,7 +6,7 @@ var request = require("request");
 var GREEN = 'http://127.0.0.1:5060';
 var BLUE  = 'http://127.0.0.1:9090';
 
-var TARGET = GREEN;
+var TARGET = BLUE;
 
 var infrastructure =
 {
@@ -23,20 +23,20 @@ var infrastructure =
     server.listen(8080);
 
     // Launch green slice
-    exec('forever start deploy/blue-www/main.js 9090');
+    exec('forever start --watch deploy/blue-www/main.js 9090');
     console.log("blue slice");
 
     // Launch blue slice
-    exec('forever start deploy/green-www/main.js 5060');
+    exec('forever start --watch deploy/green-www/main.js 5060');
     console.log("green slice");
 
-//setTimeout
-//var options = 
-//{
-//  url: "http://localhost:8080",
-//};
-//request(options, function (error, res, body) {
+    //setTimeout
+    var options =
+    {
+     url: "http://localhost:8080"
+    };
 
+    // request(options, function (error, res, body) {});
   },
 
   teardown: function()
@@ -46,14 +46,13 @@ var infrastructure =
       console.log("infrastructure shutdown");
       process.exit();
     });
-  },
+  }
 }
+  infrastructure.setup();
 
-infrastructure.setup();
-
-// Make sure to clean up.
-process.on('exit', function(){infrastructure.teardown();} );
-process.on('SIGINT', function(){infrastructure.teardown();} );
-process.on('uncaughtException', function(err){
-  console.log(err);
-  infrastructure.teardown();} );
+  // Make sure to clean up.
+  process.on('exit', function(){infrastructure.teardown();} );
+  process.on('SIGINT', function(){infrastructure.teardown();} );
+  process.on('uncaughtException', function(err){
+    console.log(err);
+    infrastructure.teardown();} );
