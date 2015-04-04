@@ -1,5 +1,9 @@
 # Workshop: Deployments and Deflighting
 
+[Original Workshop](https://github.com/CSC-DevOps/Deployment)
+[Problem Description](https://github.com/CSC-DevOps/Course/blob/master/HW/HW4.md)
+
+
 In this workshop, we'll cover the basics of setting up a barebone deployment pipeline, in support of a green-blue deployment strategy.  We will be able to build upon this exercise in the upcoming homework and DEPLOYMENT milestone.
 
 To start with, you'll need some files in this repo to help setup the blue-green infrastructure.
