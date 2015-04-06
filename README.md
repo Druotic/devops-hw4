@@ -1,8 +1,25 @@
-# Workshop: Deployments and Deflighting
+# HW4 - Blue/Green Deployment and Data Migration
 
-[Original Workshop](https://github.com/CSC-DevOps/Deployment) and
-[Problem Description](https://github.com/CSC-DevOps/Course/blob/master/HW/HW4.md)
+[Problem Description](https://github.com/CSC-DevOps/Course/blob/master/HW/HW4.md)  
+[Target app](https://github.com/Druotic/devops-hw3) used for deployment
 
+Outside/primary access port: 8080  (e.g. http://127.0.0.1:8080/)  
+Blue server port: 9090  
+Blue redis port: 6379  
+Green server port: 5060  
+Green redis port: 6380
+
+A blue/green deployment infrastructure was used (with post-receive hooks, npm install, etc) as outlined in the workshop. See original workshop spec for more details.  I have included the `deploy/` directory as an example, but normally this would change often (with each push).  The latest working version of the app from HW3 (modified) has been pushed to both the blue and green slices.
+
+A new route `/switch` has been introduced which will switch between the "blue" and "green" slices. When switched, new requests will go to the other server (and this server uses a different redis instance as well).
+
+`/switch` has been extended to migrate any existing images in the 'image' list of the current redis instance to the other slice during the switch.  This means any existing images on the slice being switched to will be deleted and replaced with the current slice's.
+
+A feature flag "mirroring" has been introduced. When enabled (enabled by default), all images added in the current slice will be added to the other as well.
+
+
+
+## Workshop: Deployments and Deflighting - Original Spec
 
 In this workshop, we'll cover the basics of setting up a barebone deployment pipeline, in support of a green-blue deployment strategy.  We will be able to build upon this exercise in the upcoming homework and DEPLOYMENT milestone.
 
