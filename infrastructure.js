@@ -18,6 +18,7 @@ var blueRedis = redis.createClient(blueRPort, hostIP, {});
 
 //defaults
 var target = blue;
+var mirroring = true;
 
 var printSwitch = function(res, slice) {
   res.write("Successfully switched to " + slice + " slice." );
@@ -38,14 +39,14 @@ var infrastructure =
         if(target == blue) {
           target = green;
           // migrate images from blue to green, db 0 (default?), 5s timeout, copy, replace
-          blueRedis.migrate(hostIP, greenRPort, "images", 0, 10, function (err, data) {
+          blueRedis.migrate(hostIP, greenRPort, "images", 0, 5, function (err, data) {
             if(err) throw err;
             printSwitch(res, "green");
           });
         }
         else {
           target = blue;
-          greenRedis.migrate(hostIP, blueRPort, "images", 0, 10, function (err, data) {
+          greenRedis.migrate(hostIP, blueRPort, "images", 0, 5, function (err, data) {
             if(err) throw err;
             printSwitch(res, "blue");
           });
