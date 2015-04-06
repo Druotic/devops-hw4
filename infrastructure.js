@@ -31,26 +31,23 @@ var infrastructure =
     // Proxy.
     var options = {};
     var proxy   = httpProxy.createProxyServer(options);
-    var slice;
 
     var server  = http.createServer(function(req, res)
     {
       if(req.url == "/switch") {
         if(target == blue) {
           target = green;
-          slice = "green";
           // migrate images from blue to green, db 0 (default?), 5s timeout, copy, replace
           blueRedis.migrate(hostIP, greenRPort, "images", 0, 10, function (err, data) {
             if(err) throw err;
-            printSwitch(res, slice);
+            printSwitch(res, "green");
           });
         }
         else {
           target = blue;
-          slice = "blue";
           greenRedis.migrate(hostIP, blueRPort, "images", 0, 10, function (err, data) {
             if(err) throw err;
-            printSwitch(res, slice);
+            printSwitch(res, "blue");
           });
         }
       }
