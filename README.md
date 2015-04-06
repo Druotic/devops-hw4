@@ -11,7 +11,7 @@ Green redis port: 6380
 
 A blue/green deployment infrastructure was used (with post-receive hooks, npm install, etc) as outlined in the workshop. See original workshop spec for more details.  I have included the `deploy/` directory as an example, but normally this would change often (with each push).  The latest working version of the app from HW3 (modified) has been pushed to both the blue and green slices.
 
-A new route `/switch` has been introduced which will switch between the "blue" and "green" slices. When switched, new requests will go to the other server (and this server uses a different redis instance as well).
+A new route `/switch` has been introduced which will switch between the "blue" and "green" slices. When switched, new requests will go to the other server (and this server uses a different redis instance as well).  For convenience, a call to the root path (e.g. `http://localhost:8080/`) will print "hello world" followed by the server port number (e.g. 9090) and the redis port number (e.g. 6379) to help with identifying which slice we are currently on.
 
 `/switch` has been extended to migrate any existing images in the 'image' list of the current redis instance to the other slice during the switch.  This means any existing images on the slice being switched to will be deleted and replaced with the current slice's.
 
