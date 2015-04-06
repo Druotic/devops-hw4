@@ -39,21 +39,34 @@ var infrastructure =
         if(target == blue) {
           target = green;
           // migrate images from blue to green, db 0 (default?), 5s timeout, copy, replace
-          blueRedis.migrate(hostIP, greenRPort, "images", 0, 5, function (err, data) {
-            if(err) throw err;
-            printSwitch(res, "green");
+          // but first, delete all existing images on other slice
+          greenRedis.del("images", function(err, data) {
+            if (err) throw err;
+            blueRedis.migrate(hostIP, greenRPort, "images", 0, 5, function (err, data) {
+              if (err) throw err;
+              printSwitch(res, "green");
+            });
           });
+
         }
         else {
           target = blue;
-          greenRedis.migrate(hostIP, blueRPort, "images", 0, 5, function (err, data) {
-            if(err) throw err;
-            printSwitch(res, "blue");
+          blueRedis.del("images", function(err, data) {
+            if (err) throw err;
+            greenRedis.migrate(hostIP, blueRPort, "images", 0, 5, function (err, data) {
+              if(err) throw err;
+              printSwitch(res, "blue");
+            });
           });
         }
       }
-      else
+      else {
+        if (mirroring && req.url == "/upload") {
+          var otherTarget = (target == blue) ? green : blue;
+          req.pipe(request.post(otherTarget + req.url));
+        }
         proxy.web( req, res, {target: target } );
+      }
 
     });
     server.listen(8080);
